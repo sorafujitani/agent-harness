@@ -80,6 +80,14 @@ typings/
 # dotenv environment variables file
 .env
 .env.test
+.dev.vars
+
+# Local development shells and tool caches
+.direnv/
+.wrangler/
+.vite/
+.flue-vite/
+.flue-vite.wrangler.jsonc
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

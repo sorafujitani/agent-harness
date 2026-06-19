@@ -1,0 +1,19 @@
+{
+  "name": "@agent-harness/runtime-local",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "flue dev",
+    "build": "flue build --target node",
+    "check": "tsgo -p tsconfig.json",
+    "connect:hello": "flue connect hello local"
+  },
+  "dependencies": {
+    "@agent-harness/agent-hello": "workspace:*",
+    "@flue/runtime": "1.0.0-beta.1"
+  },
+  "devDependencies": {
+    "@flue/cli": "1.0.0-beta.1"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@agent-harness/runtime-cf",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "flue dev",
+    "build": "flue build --target cloudflare",
+    "check": "tsgo -p tsconfig.json",
+    "deploy": "wrangler deploy --config dist/agent_harness_cloudflare/wrangler.json"
+  },
+  "dependencies": {
+    "@agent-harness/agent-hello": "workspace:*",
+    "@flue/runtime": "1.0.0-beta.1",
+    "agents": "0.16.2"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "4.20260619.1",
+    "@flue/cli": "1.0.0-beta.1",
+    "wrangler": "4.103.0"
+  }
+}

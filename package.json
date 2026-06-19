@@ -1,0 +1,36 @@
+{
+  "name": "agent-harness",
+  "private": true,
+  "workspaces": [
+    "agents/*",
+    "runtimes/*",
+    "packages/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "vp run -r --parallel dev",
+    "build": "vp run -r build",
+    "check": "vp check",
+    "fmt": "oxfmt .",
+    "fmt:check": "oxfmt --check .",
+    "lint": "oxlint .",
+    "test": "vp test",
+    "typecheck": "tsgo -p tsconfig.json",
+    "agent:new": "bun run scripts/create-agent.ts",
+    "runtime:local": "bun --cwd runtimes/node run dev",
+    "runtime:cf": "bun --cwd runtimes/cloudflare run dev",
+    "runtime:cf:deploy": "bun --cwd runtimes/cloudflare run build && bun --cwd runtimes/cloudflare run deploy"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "4.20260619.1",
+    "@flue/cli": "1.0.0-beta.1",
+    "@types/bun": "1.3.14",
+    "@types/node": "26.0.0",
+    "@typescript/native-preview": "7.0.0-dev.20260619.1",
+    "typescript": "7.0.1-rc",
+    "vite-plus": "0.2.1",
+    "vitest": "4.1.9",
+    "wrangler": "4.103.0"
+  },
+  "packageManager": "bun@1.3.13"
+}

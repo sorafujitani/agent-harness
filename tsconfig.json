@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["bun", "node"]
+  },
+  "include": [
+    "vite.config.ts",
+    "agents/**/*.ts",
+    "packages/**/*.ts",
+    "runtimes/**/*.ts",
+    "scripts/**/*.ts"
+  ]
+}

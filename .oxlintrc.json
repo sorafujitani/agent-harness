@@ -1,0 +1,36 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript", "unicorn", "oxc", "import", "vitest", "node"],
+  "env": {
+    "builtin": true,
+    "es2024": true
+  },
+  "ignorePatterns": [
+    "node_modules/**",
+    "dist/**",
+    ".cache/**",
+    ".direnv/**",
+    ".flue-vite/**",
+    ".wrangler/**"
+  ],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "perf": "warn",
+    "style": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["agents/**/*.ts", "runtimes/node/**/*.ts", "scripts/**/*.ts"],
+      "env": {
+        "node": true
+      }
+    },
+    {
+      "files": ["**/*.test.ts"],
+      "env": {
+        "vitest": true
+      }
+    }
+  ]
+}
