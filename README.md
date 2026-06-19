@@ -22,6 +22,12 @@ bun install
 Copy `.env.example` to `.env` and set the provider credentials required by the
 model you choose.
 
+Authorize Cloudflare MCP when you need account/platform operations:
+
+```sh
+codex mcp login cloudflare-api
+```
+
 ## Commands
 
 ```sh
@@ -38,9 +44,16 @@ bun run runtime:cf
 - `runtimes/node`: local Node.js Flue target that mounts selected agents.
 - `runtimes/cloudflare`: Cloudflare Flue target that mounts selected agents.
 - `packages/*`: shared libraries that are not agents.
+- `.agents/skills/*`: repo-scoped Codex skills.
+- `.codex/config.toml`: project-local Codex MCP config.
+- `docs/agent-resources.md`: resource map for Codex, skills, runtimes, and Cloudflare MCP.
 
 ## Adding agents
 
-Create a new workspace under `agents/<name>` and export a default Flue agent
-from `src/index.ts`. To expose it through a runtime, add
-`runtimes/<runtime>/src/agents/<name>.ts` that re-exports the agent package.
+Use the generator:
+
+```sh
+bun run agent:new my-agent
+```
+
+See `DEVELOPMENT.md` and `docs/agent-resources.md` for the full workflow.

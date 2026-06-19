@@ -1,0 +1,13 @@
+interface:
+  display_name: 'Cloudflare Runtime'
+  short_description: 'Deploy and debug Cloudflare agents'
+  default_prompt: 'Use $cloudflare-agent-runtime to prepare this Cloudflare agent deployment.'
+dependencies:
+  tools:
+    - type: 'mcp'
+      value: 'cloudflare-api'
+      description: 'Cloudflare API MCP server for account and platform operations.'
+      transport: 'streamable_http'
+      url: 'https://mcp.cloudflare.com/mcp'
+policy:
+  allow_implicit_invocation: true

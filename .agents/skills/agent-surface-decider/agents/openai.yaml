@@ -1,0 +1,6 @@
+interface:
+  display_name: 'Agent Surface Decider'
+  short_description: 'Choose the right agent surface'
+  default_prompt: 'Use $agent-surface-decider to decide where this behavior belongs.'
+policy:
+  allow_implicit_invocation: true

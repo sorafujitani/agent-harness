@@ -1,0 +1,6 @@
+interface:
+  display_name: 'Agent Design'
+  short_description: 'Design Flue agents for this repo'
+  default_prompt: 'Use $agent-design to design a new Flue agent for this repository.'
+policy:
+  allow_implicit_invocation: true

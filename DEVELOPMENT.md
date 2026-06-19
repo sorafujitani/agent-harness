@@ -23,6 +23,13 @@ Install JavaScript dependencies:
 bun install
 ```
 
+Authorize the project-scoped Cloudflare MCP server when Cloudflare account
+operations are needed:
+
+```sh
+codex mcp login cloudflare-api
+```
+
 ## Layout
 
 ```text
@@ -32,10 +39,26 @@ runtimes/
   node/               # Local Flue runtime using the Node target
   cloudflare/         # Cloudflare Flue runtime
 packages/             # Shared libraries that are not agents
+.agents/skills/       # Repo-scoped Codex skills
+.codex/config.toml    # Project-local Codex MCP config
+docs/                 # Agent/resource notes
 ```
 
 An agent package owns agent behavior. A runtime package decides which agents are
 available in that runtime by re-exporting them from `src/agents`.
+
+## Codex Resources
+
+Use these repo-scoped skills when asking Codex to work here:
+
+- `$agent-surface-decider`: choose one-shot task, generator, skill, local runtime, or Cloudflare runtime.
+- `$agent-design`: design a new Flue agent before scaffolding.
+- `$agent-scaffold-review`: review a generated or modified agent scaffold.
+- `$cloudflare-agent-runtime`: change, debug, or deploy the Cloudflare runtime.
+
+The Cloudflare API MCP server is configured in `.codex/config.toml`. It uses
+OAuth and prompt approval for account-affecting actions. Use Wrangler for local
+Worker commands and deploys.
 
 ## Common Commands
 
