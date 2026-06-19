@@ -16,6 +16,13 @@
         "wrangler": "4.103.0",
       },
     },
+    "agents/agent-builder": {
+      "name": "@agent-harness/agent-agent-builder",
+      "version": "0.0.0",
+      "dependencies": {
+        "@flue/runtime": "1.0.0-beta.1",
+      },
+    },
     "agents/hello": {
       "name": "@agent-harness/agent-hello",
       "version": "0.0.0",
@@ -27,6 +34,7 @@
       "name": "@agent-harness/runtime-cf",
       "version": "0.0.0",
       "dependencies": {
+        "@agent-harness/agent-agent-builder": "workspace:*",
         "@agent-harness/agent-hello": "workspace:*",
         "@flue/runtime": "1.0.0-beta.1",
         "agents": "0.16.2",
@@ -50,6 +58,8 @@
     },
   },
   "packages": {
+    "@agent-harness/agent-agent-builder": ["@agent-harness/agent-agent-builder@workspace:agents/agent-builder"],
+
     "@agent-harness/agent-hello": ["@agent-harness/agent-hello@workspace:agents/hello"],
 
     "@agent-harness/runtime-cf": ["@agent-harness/runtime-cf@workspace:runtimes/cloudflare"],

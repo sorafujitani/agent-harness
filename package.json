@@ -17,9 +17,9 @@
     "test": "vp test",
     "typecheck": "tsgo -p tsconfig.json",
     "agent:new": "bun run scripts/create-agent.ts",
-    "runtime:local": "bun --cwd runtimes/node run dev",
-    "runtime:cf": "bun --cwd runtimes/cloudflare run dev",
-    "runtime:cf:deploy": "bun --cwd runtimes/cloudflare run build && bun --cwd runtimes/cloudflare run deploy"
+    "runtime:local": "bun run --cwd runtimes/node dev",
+    "runtime:cf": "bun run --cwd runtimes/cloudflare dev",
+    "runtime:cf:deploy": "bun run --cwd runtimes/cloudflare build && bun run --cwd runtimes/cloudflare deploy"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "4.20260619.1",

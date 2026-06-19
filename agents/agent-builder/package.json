@@ -1,0 +1,17 @@
+{
+  "name": "@agent-harness/agent-agent-builder",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsgo -p tsconfig.json",
+    "check": "tsgo -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@flue/runtime": "1.0.0-beta.1"
+  }
+}

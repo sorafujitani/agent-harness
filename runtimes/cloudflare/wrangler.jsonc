@@ -4,10 +4,17 @@
   "main": "./dist/worker.mjs",
   "compatibility_date": "2026-06-19",
   "compatibility_flags": ["nodejs_compat"],
+  "ai": {
+    "binding": "AI"
+  },
   "migrations": [
     {
       "tag": "v1",
-      "new_sqlite_classes": ["FlueHelloAgent", "FlueRegistry"],
+      "new_sqlite_classes": ["FlueHelloAgent", "FlueRegistry"]
     },
-  ],
+    {
+      "tag": "v2",
+      "new_sqlite_classes": ["FlueAgentBuilderAgent"]
+    }
+  ]
 }
