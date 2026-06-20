@@ -33,6 +33,7 @@
               git
               curl
               jq
+              goreleaser
               nil
               nixfmt
             ];

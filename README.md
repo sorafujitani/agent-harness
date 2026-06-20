@@ -34,6 +34,9 @@ codex mcp login cloudflare-api
 bun run check
 bun run test
 bun run build
+bun run mcp:agent-catalog
+bun run mcp:memoli
+bun run memoli -- --help
 bun run runtime:local
 bun run runtime:cf
 ```
@@ -41,12 +44,33 @@ bun run runtime:cf
 ## Layout
 
 - `agents/*`: one workspace per agent.
+- `mcps/*`: MCP servers that expose reusable tools, resources, and prompts.
 - `runtimes/node`: local Node.js Flue target that mounts selected agents.
 - `runtimes/cloudflare`: Cloudflare Flue target that mounts selected agents.
-- `packages/*`: shared libraries that are not agents.
+- `packages/*`: shared libraries shared by agents, MCP servers, runtimes, and generators.
 - `.agents/skills/*`: repo-scoped Codex skills.
 - `.codex/config.toml`: project-local Codex MCP config.
 - `docs/agent-resources.md`: resource map for Codex, skills, runtimes, and Cloudflare MCP.
+- `docs/monorepo-structure.md`: ownership rules for Flue, MCP, and shared packages.
+
+## Included tools
+
+- `packages/memoli`: migrated memoli Markdown memo/task CLI.
+- `mcps/memoli`: stdio MCP wrapper for memoli tools.
+- `mcps/agent-catalog`: stdio MCP server for this repo's agent catalog.
+
+## Memoli Homebrew
+
+Memoli is released through GoReleaser as standalone Homebrew binaries:
+
+```sh
+bunx vp run memoli:prod-build
+bunx vp run memoli:install-local
+bun run memoli:release:check
+bun run memoli:release:snapshot
+```
+
+See `docs/memoli-homebrew.md` for release, tap, install, and MCP config steps.
 
 ## Adding agents
 

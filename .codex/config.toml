@@ -4,3 +4,17 @@ enabled = true
 required = false
 default_tools_approval_mode = "prompt"
 tool_timeout_sec = 120
+
+[mcp_servers.agent-catalog]
+command = "bun"
+args = ["run", "--silent", "--cwd", "mcps/agent-catalog", "stdio"]
+enabled = true
+required = false
+tool_timeout_sec = 120
+
+[mcp_servers.memoli]
+command = "bun"
+args = ["run", "--silent", "--cwd", "mcps/memoli", "stdio"]
+enabled = true
+required = false
+tool_timeout_sec = 120

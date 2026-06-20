@@ -6,6 +6,7 @@
   "include": [
     "vite.config.ts",
     "agents/**/*.ts",
+    "mcps/**/*.ts",
     "packages/**/*.ts",
     "runtimes/**/*.ts",
     "scripts/**/*.ts"

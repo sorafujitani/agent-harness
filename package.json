@@ -3,6 +3,7 @@
   "private": true,
   "workspaces": [
     "agents/*",
+    "mcps/*",
     "runtimes/*",
     "packages/*"
   ],
@@ -17,6 +18,12 @@
     "test": "vp test",
     "typecheck": "tsgo -p tsconfig.json",
     "agent:new": "bun run scripts/create-agent.ts",
+    "memoli:release:check": "goreleaser check --config .goreleaser.yaml",
+    "memoli:release:snapshot": "goreleaser release --snapshot --clean --config .goreleaser.yaml",
+    "memoli:release": "goreleaser release --clean --config .goreleaser.yaml",
+    "mcp:agent-catalog": "bun run --cwd mcps/agent-catalog stdio",
+    "mcp:memoli": "bun run --cwd mcps/memoli stdio",
+    "memoli": "bun run --cwd packages/memoli cli",
     "runtime:local": "bun run --cwd runtimes/node dev",
     "runtime:cf": "bun run --cwd runtimes/cloudflare dev",
     "runtime:cf:deploy": "bun run --cwd runtimes/cloudflare build && bun run --cwd runtimes/cloudflare deploy"

@@ -1,6 +1,18 @@
 import { defineConfig } from 'vite-plus';
 
 export default defineConfig({
+  run: {
+    tasks: {
+      'memoli:prod-build': {
+        command: 'bash scripts/build-memoli-local.sh',
+        cache: false,
+      },
+      'memoli:install-local': {
+        command: 'bash scripts/install-memoli-local.sh',
+        cache: false,
+      },
+    },
+  },
   lint: {
     plugins: ['typescript'],
     options: {

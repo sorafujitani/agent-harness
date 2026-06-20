@@ -1,0 +1,23 @@
+{
+  "name": "@agent-harness/mcp-agent-catalog",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/server.ts"
+  },
+  "scripts": {
+    "stdio": "bun run src/stdio.ts",
+    "build": "tsgo -p tsconfig.json",
+    "check": "tsgo -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@agent-harness/agent-catalog": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "vitest": "4.1.9"
+  }
+}

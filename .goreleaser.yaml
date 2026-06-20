@@ -1,0 +1,99 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 2
+
+project_name: memoli
+dist: dist/goreleaser
+
+before:
+  hooks:
+    - bun install --frozen-lockfile
+
+builds:
+  - id: memoli
+    builder: bun
+    binary: memoli
+    dir: .
+    main: packages/memoli/src/cli.ts
+    targets:
+      - bun-darwin-arm64
+      - bun-darwin-x64
+      - bun-linux-arm64
+      - bun-linux-x64-baseline
+    flags:
+      - --compile
+      - --minify
+
+  - id: memoli-mcp
+    builder: bun
+    binary: memoli-mcp
+    dir: .
+    main: mcps/memoli/src/stdio.ts
+    targets:
+      - bun-darwin-arm64
+      - bun-darwin-x64
+      - bun-linux-arm64
+      - bun-linux-x64-baseline
+    flags:
+      - --compile
+      - --minify
+
+archives:
+  - id: memoli
+    ids:
+      - memoli
+      - memoli-mcp
+    formats:
+      - tar.gz
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- .Os }}_
+      {{- if eq .Arch "amd64" }}x64{{ else }}{{ .Arch }}{{ end }}
+    files:
+      - README.md
+      - LICENSE
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  version_template: '{{ incpatch .Version }}-snapshot'
+
+release:
+  github:
+    owner: sorafujitani
+    name: agent-harness
+  prerelease: auto
+
+changelog:
+  use: github
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
+
+homebrew_casks:
+  - name: memoli
+    ids:
+      - memoli
+    repository:
+      owner: sorafujitani
+      name: homebrew-tap
+      branch: main
+      token: '{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}'
+    directory: Casks
+    homepage: 'https://github.com/sorafujitani/agent-harness'
+    description: 'CLI Markdown memo and task manager with an MCP stdio server'
+    license: MIT
+    binaries:
+      - memoli
+      - memoli-mcp
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/memoli"]
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/memoli-mcp"]
+          end
