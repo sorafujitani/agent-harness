@@ -12,12 +12,12 @@
   "dependencies": {
     "@agent-harness/agent-agent-builder": "workspace:*",
     "@agent-harness/agent-hello": "workspace:*",
-    "@flue/runtime": "1.0.0-beta.1",
+    "@flue/runtime": "1.0.0-beta.5",
     "agents": "0.16.2"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "4.20260619.1",
-    "@flue/cli": "1.0.0-beta.1",
+    "@flue/cli": "1.0.0-beta.5",
     "wrangler": "4.103.0"
   }
 }

@@ -19,4 +19,23 @@ detect_target() {
 
 export TARGET="${TARGET:-$(detect_target)}"
 
-goreleaser build --snapshot --clean --single-target --config .goreleaser.yaml
+if ! goreleaser build --snapshot --clean --single-target --config .goreleaser.yaml; then
+  echo "warning: GoReleaser build failed; rebuilding local binaries directly with bun" >&2
+fi
+
+ensure_binary() {
+  local id="$1"
+  local main="$2"
+  local outfile="dist/goreleaser/${id}_${TARGET}/${id}"
+
+  if [[ -f "$outfile" ]]; then
+    return
+  fi
+
+  echo "warning: $outfile was not produced by GoReleaser; rebuilding with bun" >&2
+  mkdir -p "$(dirname "$outfile")"
+  bun build --compile --minify --target "$TARGET" --outfile "$outfile" "$main"
+}
+
+ensure_binary memoli packages/memoli/src/cli.ts
+ensure_binary memoli-mcp mcps/memoli/src/stdio.ts
