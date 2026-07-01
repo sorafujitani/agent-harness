@@ -5,7 +5,7 @@ This repo uses three resource layers.
 ## Codex Resources
 
 - `AGENTS.md`: repo-wide instructions and verification commands.
-- `.agents/skills/*`: repo-scoped Codex skills for agent design, review, and Cloudflare runtime work.
+- `.agents/skills/*`: repo-scoped Codex skills for agent design, review, runtime selection, and deployment work.
 - `.codex/config.toml`: project-local Codex MCP configuration.
 
 ## Runtime Resources
@@ -13,6 +13,7 @@ This repo uses three resource layers.
 - `agents/*`: Flue agent packages.
 - `runtimes/node`: local runtime using Flue's Node target.
 - `runtimes/cloudflare`: Cloudflare runtime using Flue's Cloudflare target.
+- `runtimes/vercel`: Vercel runtime using Eve.
 - `runtimes/cloudflare/wrangler.jsonc`: Cloudflare Worker configuration and Durable Object migrations.
 
 ## Cloudflare MCP
@@ -39,7 +40,7 @@ Use Cloudflare MCP for platform/account operations. Use Wrangler for local Worke
 ## Recommended Flow
 
 1. Use `agent-surface-decider` to decide where behavior belongs.
-2. Use `agent-design` to define a new Flue agent.
+2. Use `agent-design` to define a new Flue agent, or `harness-executor` for end-to-end surface selection.
 3. Use `bun run agent:new` for deterministic scaffolding.
 4. Use `agent-scaffold-review` before merging.
 5. Use `cloudflare-agent-runtime` before Cloudflare deploys or migration changes.

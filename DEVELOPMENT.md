@@ -41,6 +41,7 @@ mcps/
 runtimes/
   node/               # Local Flue runtime using the Node target
   cloudflare/         # Cloudflare Flue runtime
+  vercel/             # Vercel runtime using Eve
 packages/
   agent-catalog/      # Shared repo catalog used by MCP servers and agents
   memoli/             # Markdown memo/task CLI and shared memoli implementation
@@ -94,6 +95,7 @@ Run local runtimes:
 ```sh
 bun run runtime:local
 bun run runtime:cf
+bun run runtime:vercel
 ```
 
 Run the local agent catalog MCP server over stdio:
@@ -139,8 +141,8 @@ Use the generator:
 bun run agent:new my-agent
 ```
 
-By default, this creates `agents/my-agent` and mounts it in every runtime under
-`runtimes/`.
+By default, this creates `agents/my-agent` and mounts it in every Flue runtime
+under `runtimes/`.
 
 Create and mount only in one runtime:
 
@@ -179,10 +181,10 @@ bun install
 bun run build
 ```
 
-## Mount An Existing Agent In A Runtime
+## Mount An Existing Flue Agent In A Runtime
 
-The generator is for new agents. To mount an existing agent in another runtime,
-add `runtimes/<runtime>/src/agents/<name>.ts`:
+The generator is for new Flue agents. To mount an existing Flue agent in
+another Flue runtime, add `runtimes/<runtime>/src/agents/<name>.ts`:
 
 ```ts
 export { default } from '@agent-harness/agent-my-agent';
@@ -212,7 +214,8 @@ bun run build
 ```
 
 `bun run build` runs the agent package builds and the Flue builds for each
-runtime.
+runtime. The Vercel runtime uses Eve's filesystem-first `agent/` directory and
+is built by `bun run --cwd runtimes/vercel build`.
 
 ## Add MCP Tools
 
@@ -243,7 +246,7 @@ It exposes:
 Smoke test the MCP server through the SDK client:
 
 ```sh
-bun --cwd mcps/agent-catalog --eval '
+cd mcps/agent-catalog && bun --eval '
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
@@ -267,7 +270,7 @@ printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' |
 Build the Cloudflare runtime:
 
 ```sh
-bun --cwd runtimes/cloudflare run build
+bun run --cwd runtimes/cloudflare build
 ```
 
 If the Flue build reports a new Durable Object class, add it to
@@ -304,7 +307,31 @@ Append a new migration tag instead:
 Deploy:
 
 ```sh
-bun --cwd runtimes/cloudflare run deploy
+bun run --cwd runtimes/cloudflare deploy
+```
+
+## Vercel Deployment
+
+The Vercel runtime is `runtimes/vercel`. It uses Eve and owns its agent files
+under `runtimes/vercel/agent`.
+
+Run it locally:
+
+```sh
+bun run runtime:vercel
+```
+
+Build and check:
+
+```sh
+bun run --cwd runtimes/vercel check
+bun run --cwd runtimes/vercel build
+```
+
+Deploy through Eve:
+
+```sh
+bun run runtime:vercel:deploy
 ```
 
 ## Notes

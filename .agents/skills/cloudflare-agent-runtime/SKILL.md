@@ -21,7 +21,7 @@ Use this skill for `runtimes/cloudflare`, Cloudflare deploys, Durable Object mig
 3. Run:
 
 ```sh
-bun --cwd runtimes/cloudflare run build
+bun run --cwd runtimes/cloudflare build
 ```
 
 4. If Flue reports a new Durable Object class:

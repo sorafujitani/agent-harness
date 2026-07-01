@@ -9,6 +9,7 @@ Respond in Japanese unless the user explicitly asks otherwise.
 - `agents/*`: one workspace per Flue agent.
 - `runtimes/node`: local runtime using Flue's Node target.
 - `runtimes/cloudflare`: Cloudflare runtime using Flue's Cloudflare target.
+- `runtimes/vercel`: Vercel runtime using Eve.
 - `packages/*`: shared libraries that are not agents.
 - `.agents/skills/*`: repo-scoped Codex skills for designing, reviewing, and deploying agents.
 
@@ -36,6 +37,8 @@ Runtime commands:
 bun run runtime:local
 bun run runtime:cf
 bun run runtime:cf:deploy
+bun run runtime:vercel
+bun run runtime:vercel:deploy
 ```
 
 Create an agent:

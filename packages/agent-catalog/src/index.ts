@@ -68,6 +68,7 @@ export type SurfaceRecommendation = {
 type PackageJson = {
   name?: string;
   dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
 };
 
 export async function findWorkspaceRoot(startDir = process.cwd()): Promise<string> {
@@ -93,7 +94,10 @@ export async function getAgentCatalog(rootDir?: string): Promise<AgentCatalog> {
   const workspaceRoot = rootDir ? path.resolve(rootDir) : await findWorkspaceRoot();
   const runtimes = await listRuntimes(workspaceRoot);
   const runtimeMounts = await listRuntimeMounts(workspaceRoot, runtimes);
-  const agents = await listAgents(workspaceRoot, runtimeMounts);
+  const agents = [
+    ...(await listFlueAgents(workspaceRoot, runtimeMounts)),
+    ...(await listRuntimeOwnedAgents(workspaceRoot, runtimes)),
+  ];
   const cloudflare = await readCloudflareCatalog(workspaceRoot);
 
   return {
@@ -179,7 +183,7 @@ export function recommendSurface(input: SurfaceRecommendationInput): SurfaceReco
       reason:
         'Durable workflows, managed sandboxes, multi-channel delivery, and Vercel-native observability fit Eve better than a platform-specific Flue mount.',
       nextStep:
-        'Create a framework-neutral agent plan, then emit an Eve directory with instructions.md, agent.ts, tools/, skills/, channels/, connections/, schedules/, and deployment verification.',
+        'Create or update the Eve app under runtimes/vercel/agent and verify with the Vercel runtime scripts.',
     };
   }
 
@@ -200,7 +204,7 @@ export function recommendSurface(input: SurfaceRecommendationInput): SurfaceReco
   };
 }
 
-async function listAgents(
+async function listFlueAgents(
   rootDir: string,
   runtimeMounts: Map<string, RuntimeMount[]>,
 ): Promise<AgentCatalogEntry[]> {
@@ -221,6 +225,32 @@ async function listAgents(
       };
     }),
   );
+}
+
+async function listRuntimeOwnedAgents(
+  rootDir: string,
+  runtimes: RuntimeMount[],
+): Promise<AgentCatalogEntry[]> {
+  const agents: AgentCatalogEntry[] = [];
+
+  for (const runtime of runtimes) {
+    if (runtime.framework !== 'eve') continue;
+
+    const agentDir = path.join(rootDir, runtime.directory, 'agent');
+    const hasAgentConfig = await exists(path.join(agentDir, 'agent.ts'));
+    const hasInstructions = await exists(path.join(agentDir, 'instructions.md'));
+    if (!hasAgentConfig && !hasInstructions) continue;
+
+    agents.push({
+      name: runtime.name,
+      directory: path.relative(rootDir, agentDir),
+      packageName: runtime.packageName,
+      runtimes: [runtime],
+      hasTests: await hasTestFile(agentDir),
+    });
+  }
+
+  return agents.sort((left, right) => left.name.localeCompare(right.name));
 }
 
 async function listRuntimes(rootDir: string): Promise<RuntimeMount[]> {
@@ -244,7 +274,10 @@ async function listRuntimes(rootDir: string): Promise<RuntimeMount[]> {
 }
 
 function inferRuntimeFramework(packageJson: PackageJson): RuntimeFramework {
-  const dependencies = packageJson.dependencies ?? {};
+  const dependencies = {
+    ...(packageJson.dependencies ?? {}),
+    ...(packageJson.devDependencies ?? {}),
+  };
 
   if ('@flue/runtime' in dependencies || '@flue/cli' in dependencies) return 'flue';
   if ('eve' in dependencies) return 'eve';
@@ -253,7 +286,10 @@ function inferRuntimeFramework(packageJson: PackageJson): RuntimeFramework {
 }
 
 function inferRuntimeTarget(name: string, packageJson: PackageJson): RuntimeTarget {
-  const dependencies = packageJson.dependencies ?? {};
+  const dependencies = {
+    ...(packageJson.dependencies ?? {}),
+    ...(packageJson.devDependencies ?? {}),
+  };
   const combined = [name, packageJson.name ?? '', ...Object.keys(dependencies)].join(' ');
 
   if (combined.includes('cloudflare') || combined.includes('wrangler')) return 'cloudflare';

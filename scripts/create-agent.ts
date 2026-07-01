@@ -15,9 +15,9 @@ function printUsage(exitCode = 0): never {
   console.log(`Usage: bun run agent:new <agent-name> [options]
 
 Options:
-  --runtime <name>                 Mount in one runtime. Repeatable.
-  --runtimes <a,b>                 Mount in comma-separated runtimes.
-  --all-runtimes                   Mount in every runtime under runtimes/.
+  --runtime <name>                 Mount in one Flue runtime. Repeatable.
+  --runtimes <a,b>                 Mount in comma-separated Flue runtimes.
+  --all-runtimes                   Mount in every Flue runtime under runtimes/.
   --no-runtime                     Only create agents/<name>.
   --cloudflare-migration <tag>     Use a specific Cloudflare migration tag.
   --no-cloudflare-migration        Skip Cloudflare migration updates.
@@ -143,13 +143,19 @@ async function exists(filePath: string): Promise<boolean> {
   }
 }
 
-async function availableRuntimes(): Promise<string[]> {
+async function availableFlueRuntimes(): Promise<string[]> {
   const runtimesDir = path.join(rootDir, 'runtimes');
   const entries = await readdir(runtimesDir, { withFileTypes: true });
-  return entries
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name)
-    .sort();
+  const names = entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);
+  const flueRuntimes: string[] = [];
+
+  for (const name of names) {
+    if (await exists(path.join(runtimesDir, name, 'flue.config.ts'))) {
+      flueRuntimes.push(name);
+    }
+  }
+
+  return flueRuntimes.sort();
 }
 
 async function readJson(filePath: string): Promise<Record<string, unknown>> {
@@ -254,6 +260,9 @@ async function mountRuntime(name: string, runtime: string, dryRun: boolean): Pro
   if (!(await exists(runtimeDir))) {
     throw new Error(`runtimes/${runtime} does not exist`);
   }
+  if (!(await exists(path.join(runtimeDir, 'flue.config.ts')))) {
+    throw new Error(`runtimes/${runtime} is not a Flue runtime`);
+  }
 
   await write(
     path.join(runtimeDir, 'src', 'agents', `${name}.ts`),
@@ -351,7 +360,7 @@ function nextMigrationTag(content: string): string {
 const { name, options } = parseArgs(args);
 validateAgentName(name);
 
-const runtimes = options.runtimes.length > 0 ? options.runtimes : await availableRuntimes();
+const runtimes = options.runtimes.length > 0 ? options.runtimes : await availableFlueRuntimes();
 
 await createAgentPackage(name, options.dryRun);
 

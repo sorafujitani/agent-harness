@@ -39,6 +39,7 @@ bun run mcp:memoli
 bun run memoli -- --help
 bun run runtime:local
 bun run runtime:cf
+bun run runtime:vercel
 ```
 
 ## Layout
@@ -47,6 +48,7 @@ bun run runtime:cf
 - `mcps/*`: MCP servers that expose reusable tools, resources, and prompts.
 - `runtimes/node`: local Node.js Flue target that mounts selected agents.
 - `runtimes/cloudflare`: Cloudflare Flue target that mounts selected agents.
+- `runtimes/vercel`: Vercel Eve runtime with its own filesystem-first agent.
 - `packages/*`: shared libraries shared by agents, MCP servers, runtimes, and generators.
 - `.agents/skills/*`: repo-scoped Codex skills.
 - `.codex/config.toml`: project-local Codex MCP config.

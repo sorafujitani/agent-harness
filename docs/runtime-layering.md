@@ -74,17 +74,17 @@ packages/agent-catalog/
 packages/agent-plan/
   framework-neutral agent plan types
 scripts/create-agent.ts
-  create Flue packages or Eve directories from the plan
-runtimes/vercel-eve/
-  Vercel/Eve app shell, deploy scripts, and generated agent directories
+  create Flue packages from the plan and keep Flue mounts updated
+runtimes/vercel/
+  Vercel runtime shell, Eve app scripts, and filesystem-first agent directory
 ```
 
 The first deployable Eve runtime should verify:
 
 ```sh
-bun --cwd runtimes/vercel-eve run build
-bun --cwd runtimes/vercel-eve run check
-vercel deploy
+bun run --cwd runtimes/vercel check
+bun run --cwd runtimes/vercel build
+bun run runtime:vercel:deploy
 curl https://<app>/eve/v1/health
 ```
 

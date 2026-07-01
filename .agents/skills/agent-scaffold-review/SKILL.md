@@ -16,6 +16,7 @@ Use this skill after `bun run agent:new` or when reviewing changes under `agents
 - Runtime mount files exist only for intended runtimes.
 - Runtime package dependencies include the agent package.
 - Cloudflare-mounted agents have Durable Object migrations covered in `runtimes/cloudflare/wrangler.jsonc`.
+- Eve runtime-owned agents live under `runtimes/vercel/agent` and are not mounted through `src/agents`.
 - No secrets are committed.
 
 ## Verification

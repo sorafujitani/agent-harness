@@ -5,7 +5,7 @@ description: Use when designing a new Flue agent for this repository, including 
 
 # Agent Design
 
-Use this skill before running `bun run agent:new` or manually editing `agents/*`.
+Use this skill before running `bun run agent:new` or manually editing Flue agents under `agents/*`.
 
 ## Workflow
 

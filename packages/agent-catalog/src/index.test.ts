@@ -14,6 +14,9 @@ describe('agent catalog', () => {
     expect(catalog.runtimes.find((runtime) => runtime.name === 'cloudflare')?.target).toBe(
       'cloudflare',
     );
+    expect(catalog.agents.some((agent) => agent.name === 'vercel')).toBe(true);
+    expect(catalog.runtimes.find((runtime) => runtime.name === 'vercel')?.framework).toBe('eve');
+    expect(catalog.runtimes.find((runtime) => runtime.name === 'vercel')?.target).toBe('vercel');
     expect(formatAgentCatalogMarkdown(catalog)).toContain('## Agents');
   });
 

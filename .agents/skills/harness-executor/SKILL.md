@@ -81,8 +81,7 @@ bun run agent:new example-agent --dry-run
      approves it during the run.
    - Use the runtime's own deploy command.
    - For Cloudflare, prefer `bun run runtime:cf:deploy`.
-   - For Vercel Eve, use the Vercel/Eve runtime deploy command once it exists;
-     otherwise stop at deployment-ready output and state the missing command.
+   - For Vercel Eve, prefer `bun run runtime:vercel:deploy`.
    - After deploy, smoke-test the live endpoint, not only the build logs.
 
 ## Output

@@ -16,7 +16,7 @@ mcps/
 runtimes/
   node/                # Local Flue runtime
   cloudflare/          # Cloudflare Flue runtime
-  <target>/            # Future runtime target, for example Vercel Eve
+  vercel/              # Vercel runtime using Eve
 packages/
   <library>/           # Shared deterministic libraries
 scripts/
@@ -80,6 +80,7 @@ Use an Agent Skill when the behavior is guidance:
 
 - Flue agents under `agents/*`
 - runtime mounts under `runtimes/*/src/agents`
+- Eve runtime-owned agents under `runtimes/*/agent`
 - Cloudflare AI binding and Durable Object migrations
 
 `mcps/agent-catalog` exposes that shared catalog through MCP:

@@ -26,7 +26,9 @@
     "memoli": "bun run --cwd packages/memoli cli",
     "runtime:local": "bun run --cwd runtimes/node dev",
     "runtime:cf": "bun run --cwd runtimes/cloudflare dev",
-    "runtime:cf:deploy": "bun run --cwd runtimes/cloudflare build && bun run --cwd runtimes/cloudflare deploy"
+    "runtime:cf:deploy": "bun run --cwd runtimes/cloudflare build && bun run --cwd runtimes/cloudflare deploy",
+    "runtime:vercel": "bun run --cwd runtimes/vercel dev",
+    "runtime:vercel:deploy": "bun run --cwd runtimes/vercel build && bun run --cwd runtimes/vercel deploy"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "4.20260619.1",
