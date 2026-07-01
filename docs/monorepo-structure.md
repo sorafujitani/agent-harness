@@ -3,6 +3,9 @@
 This repo separates agent behavior, runtime placement, shared deterministic
 logic, and MCP protocol surfaces.
 
+See `docs/runtime-layering.md` for the infrastructure-neutral layering model and
+the Flue / Cloudflare / Vercel Eve selection rules.
+
 ## Layout
 
 ```text
@@ -13,6 +16,7 @@ mcps/
 runtimes/
   node/                # Local Flue runtime
   cloudflare/          # Cloudflare Flue runtime
+  <target>/            # Future runtime target, for example Vercel Eve
 packages/
   <library>/           # Shared deterministic libraries
 scripts/
@@ -38,6 +42,17 @@ Use a Flue agent when the capability is an agent experience:
 - It needs model reasoning and multi-step behavior.
 - It needs a local or Cloudflare runtime.
 - It may need durable sessions or Cloudflare Durable Objects.
+
+Use a Vercel Eve agent when the capability needs Vercel-native agent
+infrastructure:
+
+- It needs durable workflows, managed sandbox, or resumable sessions.
+- It needs multi-channel delivery such as Slack, Discord, Teams, web chat, API,
+  cron, or Linear.
+- It benefits from Vercel Build Output, Workflows, Sandbox, Connect, Agent Runs,
+  or AI Gateway.
+- It should be generated from a framework-neutral plan rather than making
+  `agents/*` depend directly on Eve filesystem conventions.
 
 Use an MCP server when the capability is a reusable interface for AI clients:
 

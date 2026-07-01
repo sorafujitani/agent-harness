@@ -8,6 +8,12 @@ describe('agent catalog', () => {
 
     expect(catalog.agents.some((agent) => agent.name === 'hello')).toBe(true);
     expect(catalog.runtimes.some((runtime) => runtime.name === 'cloudflare')).toBe(true);
+    expect(catalog.runtimes.find((runtime) => runtime.name === 'cloudflare')?.framework).toBe(
+      'flue',
+    );
+    expect(catalog.runtimes.find((runtime) => runtime.name === 'cloudflare')?.target).toBe(
+      'cloudflare',
+    );
     expect(formatAgentCatalogMarkdown(catalog)).toContain('## Agents');
   });
 
@@ -18,5 +24,15 @@ describe('agent catalog', () => {
         reusableByOtherClients: true,
       }).surface,
     ).toBe('mcp-server');
+  });
+
+  it('recommends Eve for Vercel-native durable agent infrastructure', () => {
+    expect(
+      recommendSurface({
+        goal: 'Ship an agent with sandboxed code execution and Slack delivery',
+        needsManagedSandbox: true,
+        needsMultiChannel: true,
+      }).surface,
+    ).toBe('vercel-eve-agent');
   });
 });

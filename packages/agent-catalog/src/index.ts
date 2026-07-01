@@ -7,7 +7,13 @@ export type RuntimeMount = {
   name: string;
   directory: string;
   packageName?: string;
+  framework: RuntimeFramework;
+  target: RuntimeTarget;
 };
+
+export type RuntimeFramework = 'flue' | 'eve' | 'unknown';
+
+export type RuntimeTarget = 'local' | 'cloudflare' | 'vercel' | 'node' | 'unknown';
 
 export type AgentCatalogEntry = {
   name: string;
@@ -38,6 +44,10 @@ export type SurfaceRecommendationInput = {
   needsLocalFiles?: boolean;
   needsExternalAccess?: boolean;
   needsAlwaysOn?: boolean;
+  needsDurableWorkflow?: boolean;
+  needsManagedSandbox?: boolean;
+  needsMultiChannel?: boolean;
+  prefersVercelPlatform?: boolean;
   reusableByOtherClients?: boolean;
   deterministicScaffold?: boolean;
 };
@@ -49,6 +59,7 @@ export type SurfaceRecommendation = {
     | 'agent-skill'
     | 'local-flue-agent'
     | 'cloudflare-flue-agent'
+    | 'vercel-eve-agent'
     | 'mcp-server';
   reason: string;
   nextStep: string;
@@ -111,6 +122,8 @@ export function formatAgentCatalogMarkdown(catalog: AgentCatalog): string {
   for (const runtime of catalog.runtimes) {
     lines.push(`- ${runtime.name}`);
     lines.push(`  - package: ${runtime.packageName ?? 'unknown'}`);
+    lines.push(`  - framework: ${runtime.framework}`);
+    lines.push(`  - target: ${runtime.target}`);
   }
 
   if (catalog.cloudflare) {
@@ -152,6 +165,21 @@ export function recommendSurface(input: SurfaceRecommendationInput): SurfaceReco
       surface: 'local-flue-agent',
       reason: 'Local files and local CLI tools require a runtime on the developer machine.',
       nextStep: 'Create an agent under agents/ and mount it in runtimes/node.',
+    };
+  }
+
+  if (
+    input.needsDurableWorkflow ||
+    input.needsManagedSandbox ||
+    input.needsMultiChannel ||
+    input.prefersVercelPlatform
+  ) {
+    return {
+      surface: 'vercel-eve-agent',
+      reason:
+        'Durable workflows, managed sandboxes, multi-channel delivery, and Vercel-native observability fit Eve better than a platform-specific Flue mount.',
+      nextStep:
+        'Create a framework-neutral agent plan, then emit an Eve directory with instructions.md, agent.ts, tools/, skills/, channels/, connections/, schedules/, and deployment verification.',
     };
   }
 
@@ -208,9 +236,31 @@ async function listRuntimes(rootDir: string): Promise<RuntimeMount[]> {
         name,
         directory: path.relative(rootDir, directory),
         packageName: packageJson.name,
+        framework: inferRuntimeFramework(packageJson),
+        target: inferRuntimeTarget(name, packageJson),
       };
     }),
   );
+}
+
+function inferRuntimeFramework(packageJson: PackageJson): RuntimeFramework {
+  const dependencies = packageJson.dependencies ?? {};
+
+  if ('@flue/runtime' in dependencies || '@flue/cli' in dependencies) return 'flue';
+  if ('eve' in dependencies) return 'eve';
+
+  return 'unknown';
+}
+
+function inferRuntimeTarget(name: string, packageJson: PackageJson): RuntimeTarget {
+  const dependencies = packageJson.dependencies ?? {};
+  const combined = [name, packageJson.name ?? '', ...Object.keys(dependencies)].join(' ');
+
+  if (combined.includes('cloudflare') || combined.includes('wrangler')) return 'cloudflare';
+  if (combined.includes('vercel') || combined.includes('eve')) return 'vercel';
+  if (name === 'node' || name === 'local') return 'local';
+
+  return 'unknown';
 }
 
 async function listRuntimeMounts(

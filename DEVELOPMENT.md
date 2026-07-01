@@ -65,6 +65,12 @@ Use these repo-scoped skills when asking Codex to work here:
 - `$agent-design`: design a new Flue agent before scaffolding.
 - `$agent-scaffold-review`: review a generated or modified agent scaffold.
 - `$cloudflare-agent-runtime`: change, debug, or deploy the Cloudflare runtime.
+- `$harness-executor`: manually execute a prompt through infrastructure
+  selection, implementation, review, verification, and authorized deployment.
+
+For Vercel Eve support, keep the agent's intent separate from the framework and
+deployment target. Use `docs/runtime-layering.md` before adding a new Eve
+runtime or generator path.
 
 The Cloudflare API MCP server is configured in `.codex/config.toml`. It uses
 OAuth and prompt approval for account-affecting actions. Use Wrangler for local
